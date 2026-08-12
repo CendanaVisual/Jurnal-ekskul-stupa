@@ -17,23 +17,30 @@
         .page-section { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
         .active-page { opacity: 1; }
 
-        /* PERBAIKAN TOTAL: CSS Print Agar Mulai di Kiri Atas Presisi */
+        /* PERBAIKAN TABEL: Mengunci tabel agar teks turun ke bawah, bukan melebar */
+        #tabelJurnal { table-layout: fixed; width: 100%; }
+        #tabelJurnal th, #tabelJurnal td { 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+            word-break: break-word; 
+        }
+
+        /* CSS Print A4 Presisi Tinggi */
         @media print {
-            /* Sembunyikan halaman yang tidak perlu dicetak secara mutlak */
             #loginPage, #dashboardPage, .no-print { display: none !important; }
             
-            /* Reset body agar tidak ke tengah (menghilangkan pengaruh flexbox) */
             body { background-color: white !important; display: block !important; margin: 0 !important; padding: 0 !important; }
             
-            /* Pastikan halaman cetak dimulai dari posisi normal (kiri atas) */
             #cetakPage { display: block !important; position: relative !important; margin: 0 !important; padding: 0 !important; background: white !important; }
             
             .print-area { position: relative !important; left: 0 !important; top: 0 !important; width: 100% !important; max-width: 100% !important; border: none !important; box-shadow: none !important; margin: 0 !important; padding: 0 !important; }
             
             @page { size: A4 portrait; margin: 15mm; }
-            table { width: 100%; border-collapse: collapse; page-break-inside: auto; margin-top: 10px; }
+            
+            /* Mengunci tabel saat dicetak */
+            table { width: 100%; border-collapse: collapse; table-layout: fixed !important; margin-top: 10px; }
             tr { page-break-inside: avoid; page-break-after: auto; }
-            th, td { border: 1px solid black; padding: 6px; font-size: 11px; vertical-align: top; }
+            th, td { border: 1px solid black; padding: 6px; font-size: 11px; vertical-align: top; word-wrap: break-word !important; }
         }
     </style>
 </head>
@@ -175,10 +182,10 @@
         <!-- Kertas A4 Preview -->
         <div class="print-area max-w-[210mm] min-h-[297mm] mx-auto bg-white p-[15mm] shadow-2xl relative">
             <div class="border-b-4 border-black pb-4 mb-6 relative text-center flex flex-col items-center">
-                <!-- Endpoint Thumbnail API Drive -->
                 <div class="absolute left-0 top-0 w-20 h-20 flex items-center justify-center">
                     <img src="https://drive.google.com/thumbnail?id=1GSxfeGpRt3-egpA6uC2yzaAHn2kplk_B&sz=w500" alt="Logo Sekolah" class="w-full h-full object-contain">
                 </div>
+                
                 <h1 class="text-xl font-bold uppercase tracking-widest">Pemerintah Kota Denpasar</h1>
                 <h1 class="text-2xl font-extrabold uppercase mt-1">SD Negeri 7 Pedungan</h1>
                 <p class="text-sm mt-1">Jalan Pulau Moyo No. 63, Pedungan, Denpasar Selatan, Bali</p>
@@ -201,13 +208,14 @@
 
             <table class="w-full text-left" id="tabelJurnal">
                 <thead>
+                    <!-- PERBAIKAN: Persentase kolom yang dikunci mutlak untuk lebar A4 -->
                     <tr class="bg-gray-100">
-                        <th class="w-10 text-center border border-black p-2">No</th>
-                        <th class="w-28 text-center border border-black p-2">Tgl & Waktu</th>
-                        <th class="w-32 text-center border border-black p-2">Materi Pokok</th>
-                        <th class="text-center border border-black p-2">Uraian Kegiatan</th>
-                        <th class="w-24 text-center border border-black p-2">Keterangan</th>
-                        <th class="w-32 text-center border border-black p-2">Foto Kegiatan</th>
+                        <th style="width: 5%;" class="text-center border border-black p-2">No</th>
+                        <th style="width: 14%;" class="text-center border border-black p-2">Tgl & Waktu</th>
+                        <th style="width: 18%;" class="text-center border border-black p-2">Materi Pokok</th>
+                        <th style="width: 35%;" class="text-center border border-black p-2">Uraian Kegiatan</th>
+                        <th style="width: 13%;" class="text-center border border-black p-2">Keterangan</th>
+                        <th style="width: 15%;" class="text-center border border-black p-2">Foto</th>
                     </tr>
                 </thead>
                 <tbody id="bodyTabelJurnal">
@@ -373,7 +381,6 @@
             }
         }
 
-        // PERBAIKAN TOTAL FOTO: Otomatis mencari ID foto Google Drive untuk dijadikan Thumbnail valid
         function getDriveImageSrc(url) {
             if (!url) return '';
             const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -440,20 +447,20 @@
                     displayDate = tglStr.replace(' ', '<br><span class="text-[9px] text-gray-500">') + '</span>';
                 }
 
-                // Menggunakan fungsi getDriveImageSrc agar foto muncul
                 let htmlFoto = '';
                 if(row.foto1) htmlFoto += `<img src="${getDriveImageSrc(row.foto1)}" style="width:100%; height:80px; object-fit:cover; margin-bottom:4px; border:1px solid #ccc;">`;
                 if(row.foto2) htmlFoto += `<img src="${getDriveImageSrc(row.foto2)}" style="width:100%; height:80px; object-fit:cover; margin-bottom:4px; border:1px solid #ccc;">`;
                 if(row.foto3) htmlFoto += `<img src="${getDriveImageSrc(row.foto3)}" style="width:100%; height:80px; object-fit:cover; margin-bottom:4px; border:1px solid #ccc;">`;
 
+                // PERBAIKAN CLASS TABEL BARIS: Menambahkan class whitespace-pre-wrap agar teks mematuhi batas lebar sel
                 tbody.innerHTML += `
                     <tr>
-                        <td class="text-center font-bold border border-black p-2">${i + 1}</td>
-                        <td class="text-center border border-black p-2">${displayDate}</td>
-                        <td class="font-bold border border-black p-2">${row.materi}</td>
-                        <td class="whitespace-pre-wrap border border-black p-2">${row.uraian}</td>
-                        <td class="italic text-gray-600 border border-black p-2">${row.keterangan || '-'}</td>
-                        <td class="p-1 border border-black">${htmlFoto}</td>
+                        <td class="text-center font-bold border border-black p-2 align-top">${i + 1}</td>
+                        <td class="text-center border border-black p-2 align-top">${displayDate}</td>
+                        <td class="font-bold border border-black p-2 align-top">${row.materi}</td>
+                        <td class="whitespace-pre-wrap border border-black p-2 align-top">${row.uraian}</td>
+                        <td class="italic text-gray-600 border border-black p-2 align-top">${row.keterangan || '-'}</td>
+                        <td class="p-1 border border-black align-top text-center">${htmlFoto}</td>
                     </tr>
                 `;
             });
