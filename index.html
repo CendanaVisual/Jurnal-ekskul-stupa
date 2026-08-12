@@ -14,19 +14,24 @@
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #f1f5f9; }
         
-        /* Animasi Transisi Halaman yang Disempurnakan */
         .page-section { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
-        .active-page { display: block; opacity: 1; }
+        .active-page { opacity: 1; }
 
-        /* Style Khusus Cetak A4 Presisi (Hanya Mencetak Laporan) */
+        /* PERBAIKAN TOTAL: CSS Print Agar Mulai di Kiri Atas Presisi */
         @media print {
-            body * { visibility: hidden; }
-            .print-area, .print-area * { visibility: visible; }
-            .print-area { position: absolute; left: 0; top: 0; width: 100%; border: none; box-shadow: none; margin: 0; padding: 0; }
+            /* Sembunyikan halaman yang tidak perlu dicetak secara mutlak */
+            #loginPage, #dashboardPage, .no-print { display: none !important; }
+            
+            /* Reset body agar tidak ke tengah (menghilangkan pengaruh flexbox) */
+            body { background-color: white !important; display: block !important; margin: 0 !important; padding: 0 !important; }
+            
+            /* Pastikan halaman cetak dimulai dari posisi normal (kiri atas) */
+            #cetakPage { display: block !important; position: relative !important; margin: 0 !important; padding: 0 !important; background: white !important; }
+            
+            .print-area { position: relative !important; left: 0 !important; top: 0 !important; width: 100% !important; max-width: 100% !important; border: none !important; box-shadow: none !important; margin: 0 !important; padding: 0 !important; }
             
             @page { size: A4 portrait; margin: 15mm; }
-            body { background-color: white !important; }
-            table { width: 100%; border-collapse: collapse; page-break-inside: auto; }
+            table { width: 100%; border-collapse: collapse; page-break-inside: auto; margin-top: 10px; }
             tr { page-break-inside: avoid; page-break-after: auto; }
             th, td { border: 1px solid black; padding: 6px; font-size: 11px; vertical-align: top; }
         }
@@ -34,13 +39,12 @@
 </head>
 <body class="text-gray-800">
 
-    <!-- 1. HALAMAN LOGIN (KARTU MEWAH) -->
-    <!-- Latar belakang menggunakan Logo Sekolah dari Google Drive -->
-    <div id="loginPage" class="page-section active-page min-h-screen flex items-center justify-center bg-[url('https://drive.google.com/uc?export=view&id=1GSxfeGpRt3-egpA6uC2yzaAHn2kplk_B')] bg-cover bg-center bg-no-repeat">
+    <!-- 1. HALAMAN LOGIN -->
+    <div id="loginPage" class="page-section active-page min-h-screen flex items-center justify-center bg-[url('https://drive.google.com/thumbnail?id=1GSxfeGpRt3-egpA6uC2yzaAHn2kplk_B&sz=w1000')] bg-cover bg-center bg-no-repeat" style="display: flex;">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
         <div class="relative z-10 bg-white/10 backdrop-blur-md border border-white/20 p-10 rounded-3xl shadow-2xl w-full max-w-md text-center">
             <div class="mb-8">
-                <i class="fas fa-school text-5xl text-blue-400 mb-4"></i>
+                <img src="https://drive.google.com/thumbnail?id=1GSxfeGpRt3-egpA6uC2yzaAHn2kplk_B&sz=w200" alt="Logo" class="w-20 h-20 mx-auto mb-4 object-contain">
                 <h1 class="text-3xl font-bold text-white uppercase tracking-wider">SDN 7 Pedungan</h1>
                 <p class="text-gray-300 mt-2 font-light">Portal Jurnal Ekstrakulikuler</p>
             </div>
@@ -52,7 +56,6 @@
                 </select>
             </div>
 
-            <!-- Tombol dengan transisi dan animasi active:scale-95 -->
             <button onclick="prosesLogin()" class="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-4 rounded-xl shadow-[0_10px_20px_rgba(0,100,255,0.3)] hover:scale-105 active:scale-95 transition-all duration-300 transform">
                 MASUK DASHBOARD <i class="fas fa-arrow-right ml-2"></i>
             </button>
@@ -61,7 +64,6 @@
 
     <!-- 2. HALAMAN DASHBOARD UTAMA -->
     <div id="dashboardPage" class="page-section pb-12">
-        <!-- Header -->
         <div class="bg-gradient-to-r from-blue-900 to-cyan-800 text-white shadow-xl rounded-b-[2rem] p-8 mb-8 no-print">
             <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
@@ -79,7 +81,6 @@
             </div>
         </div>
 
-        <!-- Formulir -->
         <div class="max-w-4xl mx-auto px-4 no-print">
             <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
                 <h3 class="text-xl font-bold text-gray-800 border-b-2 border-blue-100 pb-4 mb-6"><i class="fas fa-edit text-blue-600 mr-2"></i> Formulir Pengisian Jurnal</h3>
@@ -110,19 +111,16 @@
                     <div class="pt-4">
                         <label class="block text-sm font-bold text-gray-700 mb-4">Dokumentasi <span class="text-red-500">*</span> <span class="text-xs font-normal text-gray-500">(Bisa dari Kamera / Galeri)</span></label>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <!-- Foto 1 -->
                             <div class="relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition cursor-pointer">
                                 <img id="preview1" class="absolute inset-0 w-full h-full object-cover hidden">
                                 <div id="icon1" class="text-center text-gray-400"><i class="fas fa-camera text-3xl mb-2"></i><p class="text-xs">Foto Utama (Wajib)</p></div>
                                 <input type="file" id="foto1" accept="image/*" capture="environment" required onchange="previewImg(this, 'preview1', 'icon1', 'boxFoto2')" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
-                            <!-- Foto 2 -->
                             <div id="boxFoto2" class="hidden relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition cursor-pointer">
                                 <img id="preview2" class="absolute inset-0 w-full h-full object-cover hidden">
                                 <div id="icon2" class="text-center text-gray-400"><i class="fas fa-image text-3xl mb-2"></i><p class="text-xs">Foto 2 (Opsional)</p></div>
                                 <input type="file" id="foto2" accept="image/*" capture="environment" onchange="previewImg(this, 'preview2', 'icon2', 'boxFoto3')" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
-                            <!-- Foto 3 -->
                             <div id="boxFoto3" class="hidden relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition cursor-pointer">
                                 <img id="preview3" class="absolute inset-0 w-full h-full object-cover hidden">
                                 <div id="icon3" class="text-center text-gray-400"><i class="fas fa-image text-3xl mb-2"></i><p class="text-xs">Foto 3 (Opsional)</p></div>
@@ -141,8 +139,6 @@
 
     <!-- 3. HALAMAN CETAK JURNAL -->
     <div id="cetakPage" class="page-section bg-gray-200 min-h-screen py-8">
-        
-        <!-- Filter Box -->
         <div class="max-w-[210mm] mx-auto bg-white p-6 rounded-2xl shadow-lg mb-6 border border-gray-100 no-print">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="font-bold text-lg"><i class="fas fa-filter text-blue-600 mr-2"></i> Filter Cetak</h3>
@@ -178,13 +174,11 @@
 
         <!-- Kertas A4 Preview -->
         <div class="print-area max-w-[210mm] min-h-[297mm] mx-auto bg-white p-[15mm] shadow-2xl relative">
-            <!-- Kop Surat -->
-            <div class="border-b-4 border-black pb-4 mb-6 relative text-center">
-                <!-- Logo Menggunakan Direct Link Google Drive API -->
+            <div class="border-b-4 border-black pb-4 mb-6 relative text-center flex flex-col items-center">
+                <!-- Endpoint Thumbnail API Drive -->
                 <div class="absolute left-0 top-0 w-20 h-20 flex items-center justify-center">
-                    <img src="https://drive.google.com/uc?export=view&id=1GSxfeGpRt3-egpA6uC2yzaAHn2kplk_B" alt="Logo Sekolah" class="w-full h-full object-contain">
+                    <img src="https://drive.google.com/thumbnail?id=1GSxfeGpRt3-egpA6uC2yzaAHn2kplk_B&sz=w500" alt="Logo Sekolah" class="w-full h-full object-contain">
                 </div>
-                
                 <h1 class="text-xl font-bold uppercase tracking-widest">Pemerintah Kota Denpasar</h1>
                 <h1 class="text-2xl font-extrabold uppercase mt-1">SD Negeri 7 Pedungan</h1>
                 <p class="text-sm mt-1">Jalan Pulau Moyo No. 63, Pedungan, Denpasar Selatan, Bali</p>
@@ -208,31 +202,28 @@
             <table class="w-full text-left" id="tabelJurnal">
                 <thead>
                     <tr class="bg-gray-100">
-                        <th class="w-10 text-center">No</th>
-                        <th class="w-28 text-center">Tgl & Waktu</th>
-                        <th class="w-32 text-center">Materi Pokok</th>
-                        <th class="text-center">Uraian Kegiatan</th>
-                        <th class="w-24 text-center">Keterangan</th>
-                        <th class="w-32 text-center">Foto Kegiatan</th>
+                        <th class="w-10 text-center border border-black p-2">No</th>
+                        <th class="w-28 text-center border border-black p-2">Tgl & Waktu</th>
+                        <th class="w-32 text-center border border-black p-2">Materi Pokok</th>
+                        <th class="text-center border border-black p-2">Uraian Kegiatan</th>
+                        <th class="w-24 text-center border border-black p-2">Keterangan</th>
+                        <th class="w-32 text-center border border-black p-2">Foto Kegiatan</th>
                     </tr>
                 </thead>
                 <tbody id="bodyTabelJurnal">
-                    <tr><td colspan="6" class="text-center py-4 text-gray-500 italic">Lakukan pencarian data melalui filter di atas.</td></tr>
+                    <tr><td colspan="6" class="text-center py-4 text-gray-500 italic border border-black">Lakukan pencarian data melalui filter di atas.</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // --- 1. KONFIGURASI ---
         const API_URL = "https://script.google.com/macros/s/AKfycbzGI_j54KhXZQiNZYVQBdqCPT5Fz2onWXHvCAP6Tp2ivbXc322FLveJ9ZQq1ktz654R/exec";
         
         let dataGlobal = { pembina: [], ekskul: [], jurnal: [] };
         let currentSesi = { namaPembina: "" };
         let base64Fotos = { foto1: "", foto2: "", foto3: "" };
 
-        // --- 2.inisialisasi Waktu & Tahun ---
         setInterval(() => {
             document.getElementById('waktuRealtime').innerText = new Date().toLocaleString("id-ID", { dateStyle: "full", timeStyle: "medium" }) + " WITA";
         }, 1000);
@@ -243,30 +234,24 @@
             optionsTahun += `<option value="${i}" ${i === currentYear ? 'selected' : ''}>${i}</option>`;
         }
         document.getElementById('filterTahun').innerHTML = optionsTahun;
-        
         document.getElementById('filterBulan').value = String(new Date().getMonth() + 1).padStart(2, '0');
         document.getElementById('labelTglCetak').innerText = new Date().toLocaleDateString("id-ID");
 
-        // --- 3. AMBIL DATA DARI GOOGLE SPREADSHEET (ANTI-MACET) ---
         document.addEventListener('DOMContentLoaded', async function() {
             try {
-                // Fetch data dengan pengaturan redirect standar Google
                 const response = await fetch(API_URL, { redirect: "follow" });
                 const textResponse = await response.text();
                 
-                // Mencegah crash jika Google mengirim halaman HTML (karena akses ditolak)
                 try {
                     dataGlobal = JSON.parse(textResponse);
                 } catch (e) {
                     throw new Error("Sistem Google menolak akses. Pastikan hak akses API sudah diset ke 'Siapa Saja'.");
                 }
 
-                // Tangkap error langsung dari dalam Spreadsheet jika ada
                 if (dataGlobal.status === "error") {
                     throw new Error("Pesan dari Database: " + dataGlobal.message);
                 }
                 
-                // Isi Dropdown Pembina di Login (Dengan Proteksi Data Kosong)
                 let optPembina = `<option value="">-- Silakan Pilih Nama Anda --</option>`;
                 if (Array.isArray(dataGlobal.pembina) && dataGlobal.pembina.length > 0) {
                     dataGlobal.pembina.forEach(p => optPembina += `<option value="${p.nama}">${p.nama}</option>`);
@@ -275,7 +260,6 @@
                 }
                 document.getElementById('loginSelect').innerHTML = optPembina;
 
-                // Isi Dropdown Ekskul (Dengan Proteksi Data Kosong)
                 let optEkskul = `<option value="">-- Pilih Ekstrakulikuler --</option>`;
                 if (Array.isArray(dataGlobal.ekskul) && dataGlobal.ekskul.length > 0) {
                     dataGlobal.ekskul.forEach(e => optEkskul += `<option value="${e.nama}">${e.nama}</option>`);
@@ -286,37 +270,29 @@
             } catch (error) {
                 console.error("Error Detail:", error);
                 document.getElementById('loginSelect').innerHTML = `<option value="">⚠️ Koneksi Gagal!</option>`;
-                
-                // Tampilkan notifikasi pop-up berisi letak persis masalahnya
-                Swal.fire({
-                    title: 'Gagal Memuat Data!',
-                    text: error.message,
-                    icon: 'error',
-                    confirmButtonColor: '#d33'
-                });
+                Swal.fire({ title: 'Gagal Memuat Data!', text: error.message, icon: 'error', confirmButtonColor: '#d33' });
             }
         });
 
-        // --- 4. KONTROL HALAMAN ---
         function pindahHalaman(idHalaman) {
             const semuaHalaman = document.querySelectorAll('.page-section');
-            
-            // Animasi Fade-Out untuk halaman saat ini
             semuaHalaman.forEach(el => {
                 if (el.classList.contains('active-page')) {
                     el.style.opacity = '0';
                     setTimeout(() => {
                         el.classList.remove('active-page');
                         el.style.display = 'none';
-                    }, 300); // Tunggu animasi selesai
+                    }, 300);
                 }
             });
 
-            // Animasi Fade-In untuk halaman tujuan
             setTimeout(() => {
                 const halamanTujuan = document.getElementById(idHalaman);
-                halamanTujuan.style.display = 'block';
-                // Trigger reflow
+                if (idHalaman === 'loginPage') {
+                    halamanTujuan.style.display = 'flex';
+                } else {
+                    halamanTujuan.style.display = 'block';
+                }
                 void halamanTujuan.offsetWidth; 
                 halamanTujuan.classList.add('active-page');
                 halamanTujuan.style.opacity = '1';
@@ -333,7 +309,6 @@
             pindahHalaman('dashboardPage');
         }
 
-        // --- 5. UPLOAD FOTO KE BASE64 ---
         function previewImg(input, imgId, iconId, nextBoxId) {
             const file = input.files[0];
             if (file) {
@@ -343,71 +318,48 @@
                     document.getElementById(imgId).classList.remove('hidden');
                     document.getElementById(iconId).classList.add('hidden');
                     
-                    // Simpan ke variable state
                     if(input.id === 'foto1') base64Fotos.foto1 = e.target.result;
                     if(input.id === 'foto2') base64Fotos.foto2 = e.target.result;
                     if(input.id === 'foto3') base64Fotos.foto3 = e.target.result;
 
-                    // Munculkan box foto selanjutnya
                     if(nextBoxId) document.getElementById(nextBoxId).classList.remove('hidden');
                 }
                 reader.readAsDataURL(file);
             }
         }
 
-        // --- 6. KIRIM JURNAL KE SPREADSHEET ---
         async function kirimData(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
-            
             const payload = {
                 namaPembina: currentSesi.namaPembina,
                 namaEkskul: document.getElementById('inputEkskul').value,
                 materi: document.getElementById('inputMateri').value,
                 uraian: document.getElementById('inputUraian').value,
                 keterangan: document.getElementById('inputKet').value,
-                foto1: base64Fotos.foto1,
-                foto2: base64Fotos.foto2,
-                foto3: base64Fotos.foto3
+                foto1: base64Fotos.foto1, foto2: base64Fotos.foto2, foto3: base64Fotos.foto3
             };
 
             btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> MENGIRIM...`;
             btn.disabled = true;
 
             try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(payload)
-                });
-                
+                const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
                 const result = await response.json();
                 
                 if(result.status === "success") {
-                    Swal.fire({ 
-                        title: 'Berhasil!', 
-                        text: 'Jurnal berhasil disimpan ke database.', 
-                        icon: 'success', 
-                        confirmButtonColor: '#3085d6' 
-                    }).then(() => {
-                        // 1. Kosongkan isian teks form
+                    Swal.fire({ title: 'Berhasil!', text: 'Jurnal berhasil disimpan ke database.', icon: 'success', confirmButtonColor: '#3085d6' }).then(() => {
                         document.getElementById('formJurnal').reset();
-                        
-                        // 2. Kosongkan memori foto
                         base64Fotos = { foto1: "", foto2: "", foto3: "" };
-                        
-                        // 3. Kembalikan kotak foto ke tampilan awal
                         for (let i = 1; i <= 3; i++) {
                             const img = document.getElementById('preview' + i);
                             const icon = document.getElementById('icon' + i);
                             if(img) { img.src = ""; img.classList.add('hidden'); }
                             if(icon) { icon.classList.remove('hidden'); }
                         }
-                        
-                        // 4. Sembunyikan kembali kotak foto 2 dan 3
                         document.getElementById('boxFoto2').classList.add('hidden');
                         document.getElementById('boxFoto3').classList.add('hidden');
                         
-                        // 5. Kembalikan tombol seperti semula
                         btn.innerHTML = `<i class="fas fa-paper-plane mr-2"></i> SIMPAN JURNAL`;
                         btn.disabled = false;
                     });
@@ -421,7 +373,16 @@
             }
         }
 
-        // --- 7. FILTER & CETAK JURNAL ---
+        // PERBAIKAN TOTAL FOTO: Otomatis mencari ID foto Google Drive untuk dijadikan Thumbnail valid
+        function getDriveImageSrc(url) {
+            if (!url) return '';
+            const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w400`;
+            }
+            return url;
+        }
+
         function prosesFilter() {
             const ekskul = document.getElementById('filterEkskul').value;
             const bulan = document.getElementById('filterBulan').value;
@@ -433,22 +394,27 @@
             document.getElementById('labelEkskulCetak').innerText = ekskul;
             document.getElementById('labelPeriodeCetak').innerText = `${namaBulan} ${tahun}`;
 
-            // Saring data berdasarkan Pembina, Ekskul, dan Waktu (Memecah string dd/MM/yyyy HH:mm:ss)
             const hasilFilter = dataGlobal.jurnal.filter(j => {
                 if(!j.tanggal) return false;
                 
-                // Contoh format dari database: "12/08/2026 10:45:00"
-                const tglString = String(j.tanggal); 
+                let jBulan, jTahun;
+                const tglStr = String(j.tanggal); 
                 
-                // Pisahkan tanggal dan jam berdasarkan spasi
-                const [hanyaTanggal] = tglString.split(' '); // Menghasilkan "12/08/2026"
-                
-                // Pisahkan Tanggal, Bulan, Tahun berdasarkan garis miring
-                const bagian = hanyaTanggal.split('/');
-                if(bagian.length < 3) return false;
-                
-                const jBulan = bagian[1]; // Mengambil "08"
-                const jTahun = bagian[2]; // Mengambil "2026"
+                if (tglStr.includes('T') || tglStr.includes('-')) {
+                    const d = new Date(tglStr);
+                    if(isNaN(d)) return false;
+                    jBulan = String(d.getMonth() + 1).padStart(2, '0');
+                    jTahun = String(d.getFullYear());
+                } 
+                else if (tglStr.includes('/')) {
+                    const [hanyaTanggal] = tglStr.split(' '); 
+                    const bagian = hanyaTanggal.split('/');
+                    if(bagian.length < 3) return false;
+                    jBulan = bagian[1].padStart(2, '0');
+                    jTahun = bagian[2]; 
+                } else {
+                    return false;
+                }
 
                 return j.namaPembina === currentSesi.namaPembina && 
                        j.namaEkskul === ekskul && 
@@ -460,24 +426,34 @@
             tbody.innerHTML = '';
 
             if(hasilFilter.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-red-500 font-bold">Tidak ada jurnal ditemukan pada periode ini.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-red-500 font-bold border border-black">Tidak ada jurnal ditemukan pada periode ini.</td></tr>`;
                 return;
             }
 
             hasilFilter.forEach((row, i) => {
+                let displayDate = "";
+                const tglStr = String(row.tanggal);
+                if (tglStr.includes('T') || tglStr.includes('-')) {
+                    const d = new Date(tglStr);
+                    displayDate = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} <br><span class="text-[9px] text-gray-500">${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} WITA</span>`;
+                } else {
+                    displayDate = tglStr.replace(' ', '<br><span class="text-[9px] text-gray-500">') + '</span>';
+                }
+
+                // Menggunakan fungsi getDriveImageSrc agar foto muncul
                 let htmlFoto = '';
-                if(row.foto1) htmlFoto += `<img src="${row.foto1}" style="width:100%; height:80px; object-fit:cover; margin-bottom:4px; border:1px solid #ccc;">`;
-                if(row.foto2) htmlFoto += `<img src="${row.foto2}" style="width:100%; height:80px; object-fit:cover; margin-bottom:4px; border:1px solid #ccc;">`;
-                if(row.foto3) htmlFoto += `<img src="${row.foto3}" style="width:100%; height:80px; object-fit:cover; margin-bottom:4px; border:1px solid #ccc;">`;
+                if(row.foto1) htmlFoto += `<img src="${getDriveImageSrc(row.foto1)}" style="width:100%; height:80px; object-fit:cover; margin-bottom:4px; border:1px solid #ccc;">`;
+                if(row.foto2) htmlFoto += `<img src="${getDriveImageSrc(row.foto2)}" style="width:100%; height:80px; object-fit:cover; margin-bottom:4px; border:1px solid #ccc;">`;
+                if(row.foto3) htmlFoto += `<img src="${getDriveImageSrc(row.foto3)}" style="width:100%; height:80px; object-fit:cover; margin-bottom:4px; border:1px solid #ccc;">`;
 
                 tbody.innerHTML += `
                     <tr>
-                        <td class="text-center font-bold">${i + 1}</td>
-                        <td class="text-center">${row.tanggal.replace(' ', '<br><span class="text-[9px] text-gray-500">')}</span></td>
-                        <td class="font-bold">${row.materi}</td>
-                        <td class="whitespace-pre-wrap">${row.uraian}</td>
-                        <td class="italic text-gray-600">${row.keterangan || '-'}</td>
-                        <td class="p-1">${htmlFoto}</td>
+                        <td class="text-center font-bold border border-black p-2">${i + 1}</td>
+                        <td class="text-center border border-black p-2">${displayDate}</td>
+                        <td class="font-bold border border-black p-2">${row.materi}</td>
+                        <td class="whitespace-pre-wrap border border-black p-2">${row.uraian}</td>
+                        <td class="italic text-gray-600 border border-black p-2">${row.keterangan || '-'}</td>
+                        <td class="p-1 border border-black">${htmlFoto}</td>
                     </tr>
                 `;
             });
