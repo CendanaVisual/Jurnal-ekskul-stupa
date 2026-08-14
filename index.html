@@ -116,26 +116,63 @@
                     </div>
 
                     <div class="pt-4">
-                        <label class="block text-sm font-bold text-gray-700 mb-4">Dokumentasi <span class="text-red-500">*</span> <span class="text-xs font-normal text-gray-500">(Bisa dari Kamera / Galeri)</span></label>
+                        <label class="block text-sm font-bold text-gray-700 mb-4">Dokumentasi <span class="text-red-500">*</span></label>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition cursor-pointer">
-                                <img id="preview1" class="absolute inset-0 w-full h-full object-cover hidden">
-                                <div id="icon1" class="text-center text-gray-400"><i class="fas fa-camera text-3xl mb-2"></i><p class="text-xs">Foto Utama (Wajib)</p></div>
-                                <!-- PERBAIKAN: Menghapus capture="environment" -->
-                                <input type="file" id="foto1" accept="image/*" required onchange="previewImg(this, 'preview1', 'icon1', 'boxFoto2')" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            
+                            <!-- Foto 1 -->
+                            <div class="relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition">
+                                <img id="preview1" class="absolute inset-0 w-full h-full object-cover hidden z-10">
+                                <div id="icon1" class="text-center w-full z-0 px-2">
+                                    <p class="text-xs text-gray-500 font-semibold mb-3">Foto Utama (Wajib)</p>
+                                    <div class="flex justify-center gap-2">
+                                        <label class="cursor-pointer bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
+                                            <i class="fas fa-camera mr-1"></i> Kamera
+                                            <input type="file" accept="image/*" capture="environment" onchange="previewImg(this, 'preview1', 'icon1', 'boxFoto2', 'foto1')" class="hidden">
+                                        </label>
+                                        <label class="cursor-pointer bg-green-100 hover:bg-green-200 text-green-700 px-3 py-2 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
+                                            <i class="fas fa-image mr-1"></i> Galeri
+                                            <input type="file" accept="image/*" onchange="previewImg(this, 'preview1', 'icon1', 'boxFoto2', 'foto1')" class="hidden">
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="boxFoto2" class="hidden relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition cursor-pointer">
-                                <img id="preview2" class="absolute inset-0 w-full h-full object-cover hidden">
-                                <div id="icon2" class="text-center text-gray-400"><i class="fas fa-image text-3xl mb-2"></i><p class="text-xs">Foto 2 (Opsional)</p></div>
-                                <!-- PERBAIKAN: Menghapus capture="environment" -->
-                                <input type="file" id="foto2" accept="image/*" onchange="previewImg(this, 'preview2', 'icon2', 'boxFoto3')" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+
+                            <!-- Foto 2 -->
+                            <div id="boxFoto2" class="hidden relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition">
+                                <img id="preview2" class="absolute inset-0 w-full h-full object-cover hidden z-10">
+                                <div id="icon2" class="text-center w-full z-0 px-2">
+                                    <p class="text-xs text-gray-500 font-semibold mb-3">Foto 2 (Opsional)</p>
+                                    <div class="flex justify-center gap-2">
+                                        <label class="cursor-pointer bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
+                                            <i class="fas fa-camera mr-1"></i> Kamera
+                                            <input type="file" accept="image/*" capture="environment" onchange="previewImg(this, 'preview2', 'icon2', 'boxFoto3', 'foto2')" class="hidden">
+                                        </label>
+                                        <label class="cursor-pointer bg-green-100 hover:bg-green-200 text-green-700 px-3 py-2 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
+                                            <i class="fas fa-image mr-1"></i> Galeri
+                                            <input type="file" accept="image/*" onchange="previewImg(this, 'preview2', 'icon2', 'boxFoto3', 'foto2')" class="hidden">
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="boxFoto3" class="hidden relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition cursor-pointer">
-                                <img id="preview3" class="absolute inset-0 w-full h-full object-cover hidden">
-                                <div id="icon3" class="text-center text-gray-400"><i class="fas fa-image text-3xl mb-2"></i><p class="text-xs">Foto 3 (Opsional)</p></div>
-                                <!-- PERBAIKAN: Menghapus capture="environment" -->
-                                <input type="file" id="foto3" accept="image/*" onchange="previewImg(this, 'preview3', 'icon3', null)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+
+                            <!-- Foto 3 -->
+                            <div id="boxFoto3" class="hidden relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition">
+                                <img id="preview3" class="absolute inset-0 w-full h-full object-cover hidden z-10">
+                                <div id="icon3" class="text-center w-full z-0 px-2">
+                                    <p class="text-xs text-gray-500 font-semibold mb-3">Foto 3 (Opsional)</p>
+                                    <div class="flex justify-center gap-2">
+                                        <label class="cursor-pointer bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
+                                            <i class="fas fa-camera mr-1"></i> Kamera
+                                            <input type="file" accept="image/*" capture="environment" onchange="previewImg(this, 'preview3', 'icon3', null, 'foto3')" class="hidden">
+                                        </label>
+                                        <label class="cursor-pointer bg-green-100 hover:bg-green-200 text-green-700 px-3 py-2 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
+                                            <i class="fas fa-image mr-1"></i> Galeri
+                                            <input type="file" accept="image/*" onchange="previewImg(this, 'preview3', 'icon3', null, 'foto3')" class="hidden">
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                     </div>
 
@@ -319,7 +356,7 @@
             pindahHalaman('dashboardPage');
         }
 
-        function previewImg(input, imgId, iconId, nextBoxId) {
+        function previewImg(input, imgId, iconId, nextBoxId, fotoKey) {
             const file = input.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -328,9 +365,8 @@
                     document.getElementById(imgId).classList.remove('hidden');
                     document.getElementById(iconId).classList.add('hidden');
                     
-                    if(input.id === 'foto1') base64Fotos.foto1 = e.target.result;
-                    if(input.id === 'foto2') base64Fotos.foto2 = e.target.result;
-                    if(input.id === 'foto3') base64Fotos.foto3 = e.target.result;
+                    // Simpan data base64 ke memori berdasarkan fotoKey
+                    base64Fotos[fotoKey] = e.target.result;
 
                     if(nextBoxId) document.getElementById(nextBoxId).classList.remove('hidden');
                 }
@@ -340,6 +376,12 @@
 
         async function kirimData(e) {
             e.preventDefault();
+            
+            // Validasi manual: Cegah form dikirim jika foto 1 belum diisi
+            if(!base64Fotos.foto1) {
+                return Swal.fire('Perhatian', 'Dokumentasi Foto Utama (Wajib) harus diisi!', 'warning');
+            }
+
             const btn = document.getElementById('btnSubmit');
             const payload = {
                 namaPembina: currentSesi.namaPembina,
@@ -353,6 +395,7 @@
             btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> MENGIRIM...`;
             btn.disabled = true;
 
+            // ... (Biarkan sisa kode di bawahnya tetap sama seperti sebelumnya) ...
             try {
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
                 const result = await response.json();
