@@ -221,7 +221,7 @@
 
         <!-- Kertas A4 Preview -->
         <div class="print-area max-w-[210mm] min-h-[297mm] mx-auto bg-white p-[15mm] shadow-2xl relative">
-            <div class="border-b-4 border-black pb-4 mb-6 relative text-center flex flex-col items-center">
+            <div class="border-b-4 border-black pb-8 mb-6 relative text-center flex flex-col items-center">
                 <div class="absolute left-0 top-0 w-20 h-20 flex items-center justify-center">
                     <img src="https://drive.google.com/thumbnail?id=1GSxfeGpRt3-egpA6uC2yzaAHn2kplk_B&sz=w500" alt="Logo Sekolah" class="w-full h-full object-contain">
                 </div>
@@ -502,9 +502,9 @@
                     <tr>
                         <td class="text-center font-bold border border-black p-2 align-top">${i + 1}</td>
                         <td class="text-center border border-black p-2 align-top">${displayDate}</td>
-                        <td class="font-bold border border-black p-2 align-top">${row.materi}</td>
-                        <td class="whitespace-pre-wrap border border-black p-2 align-top">${row.uraian}</td>
-                        <td class="italic text-gray-600 border border-black p-2 align-top">${row.keterangan || '-'}</td>
+                        <td class="font-bold border border-black p-2 align-top text-justify">${row.materi}</td>
+                        <td class="whitespace-pre-wrap border border-black p-2 align-top text-justify">${row.uraian}</td>
+                        <td class="italic text-gray-600 border border-black p-2 align-top text-justify">${row.keterangan || '-'}</td>
                         <td class="p-1 border border-black align-top text-center">${htmlFoto}</td>
                     </tr>
                 `;
