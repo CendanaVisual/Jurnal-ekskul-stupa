@@ -121,17 +121,20 @@
                             <div class="relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition cursor-pointer">
                                 <img id="preview1" class="absolute inset-0 w-full h-full object-cover hidden">
                                 <div id="icon1" class="text-center text-gray-400"><i class="fas fa-camera text-3xl mb-2"></i><p class="text-xs">Foto Utama (Wajib)</p></div>
-                                <input type="file" id="foto1" accept="image/*" capture="environment" required onchange="previewImg(this, 'preview1', 'icon1', 'boxFoto2')" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                <!-- PERBAIKAN: Menghapus capture="environment" -->
+                                <input type="file" id="foto1" accept="image/*" required onchange="previewImg(this, 'preview1', 'icon1', 'boxFoto2')" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
                             <div id="boxFoto2" class="hidden relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition cursor-pointer">
                                 <img id="preview2" class="absolute inset-0 w-full h-full object-cover hidden">
                                 <div id="icon2" class="text-center text-gray-400"><i class="fas fa-image text-3xl mb-2"></i><p class="text-xs">Foto 2 (Opsional)</p></div>
-                                <input type="file" id="foto2" accept="image/*" capture="environment" onchange="previewImg(this, 'preview2', 'icon2', 'boxFoto3')" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                <!-- PERBAIKAN: Menghapus capture="environment" -->
+                                <input type="file" id="foto2" accept="image/*" onchange="previewImg(this, 'preview2', 'icon2', 'boxFoto3')" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
                             <div id="boxFoto3" class="hidden relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 h-40 flex flex-col items-center justify-center overflow-hidden hover:border-blue-500 transition cursor-pointer">
                                 <img id="preview3" class="absolute inset-0 w-full h-full object-cover hidden">
                                 <div id="icon3" class="text-center text-gray-400"><i class="fas fa-image text-3xl mb-2"></i><p class="text-xs">Foto 3 (Opsional)</p></div>
-                                <input type="file" id="foto3" accept="image/*" capture="environment" onchange="previewImg(this, 'preview3', 'icon3', null)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                <!-- PERBAIKAN: Menghapus capture="environment" -->
+                                <input type="file" id="foto3" accept="image/*" onchange="previewImg(this, 'preview3', 'icon3', null)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
                         </div>
                     </div>
